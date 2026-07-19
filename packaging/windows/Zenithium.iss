@@ -177,8 +177,10 @@ Root: HKA; Subkey: "Software\Classes\Directory\Background\shell\OpenWithZenithiu
     ValueType: string; ValueName: ""; \
     ValueData: """{app}\{#AppExeName}"" ""%V"""; Tasks: openwithfolder
 
-; ---------- Add to PATH ----------------------------------------------------
-Root: HKA; Subkey: "Environment"; ValueType: expandsz; ValueName: "Path"; \
+; ---------- Add to user PATH ----------------------------------------------
+; Always writes to the CURRENT_USER hive (per-user PATH) — no admin needed
+; and no risk of touching system-wide env vars.
+Root: HKCU; Subkey: "Environment"; ValueType: expandsz; ValueName: "Path"; \
     ValueData: "{olddata};{app}"; Tasks: addtopath; \
     Check: NeedsAddPath(ExpandConstant('{app}'))
 

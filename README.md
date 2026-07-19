@@ -105,8 +105,9 @@ The installer offers:
 - **Shell context menu** — right-click a file or folder → *Open with Zenithium* (and the folder background — right-click empty space inside a folder to open it as a workspace)
 - Proper **uninstaller** that removes registry entries and shortcuts
 
-Prereqs: [Inno Setup 6](https://jrsoftware.org/isinfo.php) installed
-(`iscc.exe` on PATH), plus the normal Zenithium build toolchain.
+Prereqs: [Inno Setup 6 or 7](https://jrsoftware.org/isdl.php) installed
+(`iscc.exe` on PATH or in the default Program Files location), plus the
+normal Zenithium build toolchain.
 
 For a **portable** ZIP without an installer:
 

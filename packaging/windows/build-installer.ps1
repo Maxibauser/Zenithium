@@ -1,4 +1,4 @@
-# Zenithium — Windows installer build helper.
+# Zenithium - Windows installer build helper.
 #
 # Usage:
 #     .\packaging\windows\build-installer.ps1
@@ -8,8 +8,8 @@
 #     2. Install into build/windows-msvc-release/dist/ (windeployqt runs here).
 #     3. Run Inno Setup (iscc) against Zenithium.iss.
 #
-# Requires: vcvars64.bat on your PATH via VS install, CMake, Ninja, and
-# Inno Setup 6 (iscc.exe on PATH or at "C:\Program Files (x86)\Inno Setup 6\").
+# Requires: MSVC (any recent VS install), CMake, Ninja, and Inno Setup 6 or 7
+# (iscc.exe on PATH or in the default Program Files location).
 
 param(
     [string] $Preset  = "windows-msvc-release",
@@ -32,20 +32,22 @@ try {
     }
     Write-Host ">>> Zenithium $Version" -ForegroundColor Cyan
 
-    # ---- 1. Import MSVC env into this shell -------------------------------
+    # ---- 1. Locate + import MSVC env ------------------------------------
     $vcvars = "C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat"
     if (-not (Test-Path $vcvars)) {
-        # Fallback: search common VS install locations.
         $found = Get-ChildItem "C:\Program Files*\Microsoft Visual Studio\*\*\VC\Auxiliary\Build\vcvars64.bat" -ErrorAction SilentlyContinue |
                  Select-Object -First 1
         if ($found) { $vcvars = $found.FullName }
     }
     if (-not (Test-Path $vcvars)) {
-        throw "Could not locate vcvars64.bat — set it manually at the top of this script."
+        throw "Could not locate vcvars64.bat. Set it manually at the top of this script."
     }
     Write-Host ">>> Importing MSVC env from $vcvars"
-    cmd /c "`"$vcvars`" >NUL 2>&1 && set" | ForEach-Object {
-        if ($_ -match '^([^=]+)=(.*)$') {
+
+    $quoted = '"' + $vcvars + '"'
+    $envLines = & cmd.exe /c "$quoted >NUL 2>&1 & set"
+    foreach ($line in $envLines) {
+        if ($line -match '^([^=]+)=(.*)$') {
             [System.Environment]::SetEnvironmentVariable($matches[1], $matches[2])
         }
     }
@@ -53,7 +55,31 @@ try {
     $buildDir = "build\$Preset"
     $stageDir = Join-Path $repoRoot "$buildDir\dist"
 
-    # ---- 2. Configure + build --------------------------------------------
+    # ---- 2. Locate Qt6 --------------------------------------------------
+    if (-not $env:CMAKE_PREFIX_PATH -and -not $env:Qt6_DIR) {
+        $qtRoots = @()
+        foreach ($base in @("C:\Qt", "D:\Qt")) {
+            if (Test-Path $base) {
+                $qtRoots += Get-ChildItem $base -Directory -ErrorAction SilentlyContinue |
+                    Where-Object { $_.Name -match '^\d+\.\d+\.\d+$' } |
+                    Sort-Object Name -Descending
+            }
+        }
+        foreach ($qtDir in $qtRoots) {
+            $candidate = Join-Path $qtDir.FullName "msvc2019_64\lib\cmake\Qt6"
+            if (Test-Path $candidate) {
+                Write-Host ">>> Found Qt6 at $candidate"
+                $env:Qt6_DIR = $candidate
+                $env:CMAKE_PREFIX_PATH = Join-Path $qtDir.FullName "msvc2019_64"
+                break
+            }
+        }
+        if (-not $env:Qt6_DIR) {
+            throw "Could not locate Qt6. Set Qt6_DIR or CMAKE_PREFIX_PATH before running."
+        }
+    }
+
+    # ---- 3. Configure + build -------------------------------------------
     Write-Host ">>> Configuring ($Preset)" -ForegroundColor Cyan
     cmake --preset $Preset
     if ($LASTEXITCODE -ne 0) { throw "cmake configure failed" }
@@ -72,6 +98,8 @@ try {
     $iscc = Get-Command iscc.exe -ErrorAction SilentlyContinue
     if (-not $iscc) {
         foreach ($cand in @(
+            "C:\Program Files (x86)\Inno Setup 7\iscc.exe",
+            "C:\Program Files\Inno Setup 7\iscc.exe",
             "C:\Program Files (x86)\Inno Setup 6\iscc.exe",
             "C:\Program Files\Inno Setup 6\iscc.exe"
         )) {
@@ -79,7 +107,7 @@ try {
         }
     }
     if (-not $iscc) {
-        throw "iscc.exe not found. Install Inno Setup 6 (https://jrsoftware.org/isinfo.php)."
+        throw "iscc.exe not found. Install Inno Setup 6 or 7 (https://jrsoftware.org/isdl.php)."
     }
 
     $iss = Join-Path $PSScriptRoot "Zenithium.iss"
@@ -91,7 +119,7 @@ try {
     Write-Host ""
     Write-Host ">>> Installer written to $outDir" -ForegroundColor Green
     Get-ChildItem $outDir -Filter "Zenithium-Setup-*.exe" |
-        ForEach-Object { Write-Host "    $($_.FullName)" }
+        ForEach-Object { Write-Host ("    " + $_.FullName) }
 }
 finally {
     Pop-Location
