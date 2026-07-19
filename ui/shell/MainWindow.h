@@ -22,6 +22,7 @@ class WelcomePage;
 class GitPanel;
 class TerminalPanel;
 class FindBar;
+class CommandPalette;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -29,11 +30,14 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     ~MainWindow() override;
 
+    bool eventFilter(QObject* watched, QEvent* event) override;
+
     void openWorkspace(const QString& folderPath);
     void openFileInTab(const QString& path) { openFile(path); }
     void showSettingsDialog() { openSettings(); }
     void toggleGitPanel(bool on);
     void toggleTerminalPanel(bool on);
+    void openCommandPalette();
 
 private:
     void buildLayout();
@@ -71,6 +75,7 @@ private:
     GitPanel*          m_git        {nullptr};
     TerminalPanel*     m_terminal   {nullptr};
     FindBar*           m_findBar    {nullptr};
+    CommandPalette*    m_palette    {nullptr};
     QSplitter*         m_vsplit     {nullptr};
 
     std::vector<std::unique_ptr<zen::document::Document>> m_docs;

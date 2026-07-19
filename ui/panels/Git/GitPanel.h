@@ -40,6 +40,8 @@ private:
     QLabel*         m_ahead      {nullptr};
     QLabel*         m_repoHint   {nullptr};
     QPushButton*    m_init       {nullptr};
+    QPushButton*    m_publish    {nullptr};
+    QString         m_currentBranch;
 
     QListWidget*    m_staged     {nullptr};
     QListWidget*    m_unstaged   {nullptr};

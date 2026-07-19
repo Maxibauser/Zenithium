@@ -461,3 +461,24 @@ QToolTip {
 #ZenFindToolBtn:hover     { background-color: #1c2130; color: #ffffff; }
 #ZenFindToolBtn:checked   { background-color: #6ea8ff; color: #0f1218; border-color: #6ea8ff; }
 #ZenFindStatus { color: #8b93a7; font-size: 11px; padding: 0 6px; }
+
+/* Command palette */
+#ZenCommandPalette {
+    background-color: #161a22;
+    border: 1px solid #262c3d;
+    border-radius: 10px;
+}
+#ZenCommandInput {
+    background-color: #0f1218; border: 1px solid #262c3d;
+    border-radius: 6px; padding: 8px 10px; color: #e6e9f2;
+    font-size: 13px;
+    selection-background-color: #6ea8ff; selection-color: #0f1218;
+}
+#ZenCommandInput:focus { border-color: #6ea8ff; }
+#ZenCommandList {
+    background-color: transparent; border: none; outline: 0;
+    color: #cbd0dd; font-size: 12px;
+}
+#ZenCommandList::item          { padding: 6px 8px; border-radius: 4px; }
+#ZenCommandList::item:hover    { background-color: #1c2130; color: #ffffff; }
+#ZenCommandList::item:selected { background-color: #24304d; color: #ffffff; }

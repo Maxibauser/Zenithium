@@ -203,6 +203,29 @@ void GitService::initRepo() {
     proc->start(QStringLiteral("git"), {QStringLiteral("init")});
 }
 
+void GitService::publishToRemote(const QString& url, const QString& branch) {
+    if (!m_isRepo || url.isEmpty() || branch.isEmpty()) {
+        emit logLine(QStringLiteral("[git] publish: missing url or branch"));
+        return;
+    }
+    // Set origin URL (add if new, otherwise replace).
+    QProcess check;
+    check.setWorkingDirectory(m_repoPath);
+    check.start(QStringLiteral("git"),
+                {QStringLiteral("remote"), QStringLiteral("get-url"), QStringLiteral("origin")});
+    check.waitForFinished(3000);
+    const bool hasOrigin = (check.exitCode() == 0);
+    if (hasOrigin) {
+        runGit(QStringLiteral("remote"),
+               {QStringLiteral("set-url"), QStringLiteral("origin"), url}, false);
+    } else {
+        runGit(QStringLiteral("remote"),
+               {QStringLiteral("add"), QStringLiteral("origin"), url}, false);
+    }
+    runGit(QStringLiteral("push"),
+           {QStringLiteral("-u"), QStringLiteral("origin"), branch}, true);
+}
+
 void GitService::push()  { runGit(QStringLiteral("push"),  {}, true); }
 void GitService::pull()  { runGit(QStringLiteral("pull"),  {}, true); }
 void GitService::fetch() { runGit(QStringLiteral("fetch"), {}, true); }

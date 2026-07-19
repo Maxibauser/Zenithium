@@ -1,6 +1,7 @@
 #include "GitPanel.h"
 
 #include <QHBoxLayout>
+#include <QInputDialog>
 #include <QLabel>
 #include <QListWidget>
 #include <QPlainTextEdit>
@@ -103,6 +104,11 @@ void GitPanel::buildUi() {
     m_init->hide();
     root->addWidget(m_init);
 
+    m_publish = new QPushButton(tr("Publish Branch to Remote…"), this);
+    m_publish->setObjectName("ZenGitInit");
+    m_publish->hide();
+    root->addWidget(m_publish);
+
     // Commit message.
     m_message = new QPlainTextEdit(this);
     m_message->setObjectName("ZenGitMessage");
@@ -164,6 +170,19 @@ void GitPanel::wireActions() {
     connect(m_push,    &QToolButton::clicked, m_git, &zen::git::GitService::push);
 
     connect(m_init, &QPushButton::clicked, m_git, &zen::git::GitService::initRepo);
+    connect(m_publish, &QPushButton::clicked, this, [this] {
+        if (m_currentBranch.isEmpty()) {
+            m_output->appendPlainText(tr("[git] no current branch — commit first"));
+            return;
+        }
+        bool ok = false;
+        const QString url = QInputDialog::getText(
+            this, tr("Publish Branch"),
+            tr("Remote URL for origin (e.g. https://github.com/you/repo.git):"),
+            QLineEdit::Normal, QString(), &ok);
+        if (!ok || url.trimmed().isEmpty()) return;
+        m_git->publishToRemote(url.trimmed(), m_currentBranch);
+    });
     connect(m_stageAll, &QPushButton::clicked, m_git, &zen::git::GitService::stageAll);
     connect(m_commit,   &QPushButton::clicked, this, [this] {
         const QString msg = m_message->toPlainText();
@@ -216,6 +235,7 @@ void GitPanel::onStatusUpdated(const zen::git::StatusSnapshot& snap) {
             : tr("Open a folder to use source control."));
         m_repoHint->show();
         m_init->setVisible(hasFolder);
+        m_publish->hide();
         m_commit  ->setEnabled(false);
         m_stageAll->setEnabled(false);
         m_push->setEnabled(false); m_pull->setEnabled(false);
@@ -225,6 +245,8 @@ void GitPanel::onStatusUpdated(const zen::git::StatusSnapshot& snap) {
 
     m_repoHint->hide();
     m_init->hide();
+    m_currentBranch = snap.branch;
+    m_publish->setVisible(snap.upstream.isEmpty() && !snap.branch.isEmpty());
     m_commit  ->setEnabled(true);
     m_stageAll->setEnabled(true);
     m_push->setEnabled(true); m_pull->setEnabled(true);

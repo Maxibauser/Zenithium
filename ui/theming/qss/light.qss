@@ -222,3 +222,23 @@ QToolTip {
 #ZenFindToolBtn:hover   { background-color: #dde1eb; }
 #ZenFindToolBtn:checked { background-color: #6ea8ff; color: #ffffff; border-color: #6ea8ff; }
 #ZenFindStatus { color: #66708a; font-size: 11px; padding: 0 6px; }
+
+#ZenCommandPalette {
+    background-color: #ffffff;
+    border: 1px solid #dde1eb;
+    border-radius: 10px;
+}
+#ZenCommandInput {
+    background-color: #ffffff; border: 1px solid #dde1eb;
+    border-radius: 6px; padding: 8px 10px; color: #1a1f2c;
+    font-size: 13px;
+    selection-background-color: #6ea8ff; selection-color: #ffffff;
+}
+#ZenCommandInput:focus { border-color: #6ea8ff; }
+#ZenCommandList {
+    background-color: transparent; border: none; outline: 0;
+    color: #1a1f2c; font-size: 12px;
+}
+#ZenCommandList::item          { padding: 6px 8px; border-radius: 4px; }
+#ZenCommandList::item:hover    { background-color: #eef0f5; }
+#ZenCommandList::item:selected { background-color: #cbd5f0; color: #1a1f2c; }

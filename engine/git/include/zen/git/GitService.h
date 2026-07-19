@@ -61,6 +61,9 @@ public:
     void pull();
     void fetch();
 
+    // Set origin (creates if missing, updates if present) and push current branch with -u.
+    void publishToRemote(const QString& url, const QString& branch);
+
 signals:
     void statusUpdated(const zen::git::StatusSnapshot& snap);
     void logLine     (const QString& line);

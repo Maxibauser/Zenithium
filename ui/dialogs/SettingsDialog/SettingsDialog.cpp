@@ -5,6 +5,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDialogButtonBox>
+#include <QFontComboBox>
 #include <QFormLayout>
 #include <QGroupBox>
 #include <QLabel>
@@ -50,12 +51,25 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
     m_fontSize   = new QSpinBox(editorBox);
     m_fontSize->setRange(8, 32);
     m_fontSize->setSuffix(tr(" pt"));
+    m_fontFamily = new QFontComboBox(editorBox);
+    m_fontFamily->setFontFilters(QFontComboBox::MonospacedFonts);
+    m_tabWidth = new QSpinBox(editorBox);
+    m_tabWidth->setRange(1, 16);
+    m_tabWidth->setSuffix(tr(" spaces"));
+    m_wordWrap = new QCheckBox(tr("Word wrap"), editorBox);
+    m_showWs   = new QCheckBox(tr("Show whitespace (spaces, tabs)"), editorBox);
+    m_autoSave = new QCheckBox(tr("Auto-save on focus loss"), editorBox);
 
     editor->addRow(m_syntax);
     editor->addRow(m_changeBars);
     editor->addRow(m_lineNums);
     editor->addRow(m_modIndic);
-    editor->addRow(tr("Font size"), m_fontSize);
+    editor->addRow(m_wordWrap);
+    editor->addRow(m_showWs);
+    editor->addRow(m_autoSave);
+    editor->addRow(tr("Font family"), m_fontFamily);
+    editor->addRow(tr("Font size"),   m_fontSize);
+    editor->addRow(tr("Tab width"),   m_tabWidth);
     root->addWidget(editorBox);
 
     // --- Appearance group ---
@@ -100,6 +114,11 @@ void SettingsDialog::loadFromPrefs() {
     m_lineNums  ->setChecked(p.lineNumbersEnabled());
     m_modIndic  ->setChecked(p.modifiedIndicatorEnabled());
     m_fontSize  ->setValue(p.editorFontSize());
+    m_fontFamily->setCurrentFont(QFont(p.editorFontFamily()));
+    m_tabWidth  ->setValue(p.tabWidth());
+    m_wordWrap  ->setChecked(p.wordWrap());
+    m_showWs    ->setChecked(p.showWhitespace());
+    m_autoSave  ->setChecked(p.autoSaveEnabled());
 
     const int themeIdx  = m_theme->findData(p.theme());
     m_theme ->setCurrentIndex(themeIdx  >= 0 ? themeIdx  : 0);
@@ -114,6 +133,11 @@ void SettingsDialog::applyToPrefs() {
     p.setLineNumbersEnabled       (m_lineNums  ->isChecked());
     p.setModifiedIndicatorEnabled (m_modIndic  ->isChecked());
     p.setEditorFontSize           (m_fontSize  ->value());
+    p.setEditorFontFamily         (m_fontFamily->currentFont().family());
+    p.setTabWidth                 (m_tabWidth  ->value());
+    p.setWordWrap                 (m_wordWrap  ->isChecked());
+    p.setShowWhitespace           (m_showWs    ->isChecked());
+    p.setAutoSaveEnabled          (m_autoSave  ->isChecked());
     p.setTheme                    (m_theme     ->currentData().toString());
     p.setAccentColor              (QColor(m_accent->currentData().toString()));
 }

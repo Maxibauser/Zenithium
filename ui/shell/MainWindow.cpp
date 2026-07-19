@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 
+#include "CommandPalette.h"
 #include "FindBar.h"
 #include "StatusBar.h"
 #include "TabCloseButton.h"
@@ -15,6 +16,7 @@
 #include "welcome/WelcomePage.h"
 
 #include <QApplication>
+#include <QEvent>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFont>
@@ -22,6 +24,8 @@
 #include <QMessageBox>
 #include <QSplitter>
 #include <QStackedWidget>
+#include <QTextDocument>
+#include <QTextOption>
 #include <QTabBar>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -42,6 +46,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
     m_highlighter = new SyntaxHighlighter(m_editor->document());
     m_findBar->attachEditor(m_editor);
+    m_editor->installEventFilter(this);
 
     connect(m_explorer, &ExplorerPanel::fileActivated, this, &MainWindow::openFile);
     connect(m_explorer, &ExplorerPanel::openFolderRequested,
@@ -65,6 +70,19 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
 
 MainWindow::~MainWindow() = default;
 
+bool MainWindow::eventFilter(QObject* watched, QEvent* event) {
+    if (watched == m_editor && event->type() == QEvent::FocusOut) {
+        if (Preferences::instance().autoSaveEnabled()) {
+            auto* doc = currentDoc();
+            if (doc && doc->isModified() && !doc->filePath().isEmpty()) {
+                QString err;
+                doc->saveToFile(doc->filePath(), &err);
+            }
+        }
+    }
+    return QMainWindow::eventFilter(watched, event);
+}
+
 void MainWindow::openWorkspace(const QString& folderPath) {
     if (folderPath.isEmpty()) return;
     m_explorer->setRootFolder(folderPath);
@@ -76,6 +94,90 @@ void MainWindow::openWorkspace(const QString& folderPath) {
 void MainWindow::toggleGitPanel(bool on) {
     m_git->setVisible(on);
     if (on) m_git->service()->refreshStatus();
+}
+
+void MainWindow::openCommandPalette() {
+    if (!m_palette) {
+        m_palette = new CommandPalette(this);
+        QVector<Command> cmds;
+        auto add = [&](const QString& cat, const QString& name,
+                       const QString& sc, std::function<void()> fn) {
+            cmds.push_back({name, cat, sc, std::move(fn)});
+        };
+
+        // File
+        add("File", tr("New File"),    "Ctrl+N",       [this] { newUntitledTab(); });
+        add("File", tr("Open File…"),  "Ctrl+O",       [this] { openFileDialog(); });
+        add("File", tr("Open Folder…"),"Ctrl+K Ctrl+O",[this] { openFolderDialog(); });
+        add("File", tr("Save"),        "Ctrl+S",       [this] { saveFile(); });
+        add("File", tr("Save As…"),    "Ctrl+Shift+S", [this] { saveFileAs(); });
+        add("File", tr("Close Tab"),   "Ctrl+W",       [this] {
+            if (m_currentTab >= 0) closeTab(m_currentTab);
+        });
+
+        // Edit
+        add("Edit", tr("Undo"),  "Ctrl+Z", [this] { m_editor->undo(); });
+        add("Edit", tr("Redo"),  "Ctrl+Y", [this] { m_editor->redo(); });
+        add("Edit", tr("Find…"), "Ctrl+F", [this] { m_findBar->showAndFocus(); });
+
+        // View / Panels
+        add("View", tr("Toggle Explorer"),
+            "Ctrl+B",       [this] { m_explorer->setVisible(!m_explorer->isVisible()); });
+        add("View", tr("Toggle Source Control"),
+            "Ctrl+Shift+G", [this] { m_titleBar->gitButton()->toggle(); });
+        add("View", tr("Toggle Terminal"),
+            "Ctrl+`",       [this] { m_titleBar->terminalButton()->toggle(); });
+        add("View", tr("Welcome Page"), QString(), [this] {
+            m_tabs->setCurrentIndex(-1);
+            m_stack->setCurrentWidget(m_welcome);
+            m_currentTab = -1;
+            updateWindowTitle();
+        });
+
+        // Settings
+        add("Settings", tr("Preferences…"), "Ctrl+,",
+            [this] { openSettings(); });
+        add("Settings", tr("Switch to Dark Theme"), QString(),
+            [] { Preferences::instance().setTheme("dark"); });
+        add("Settings", tr("Switch to Light Theme"), QString(),
+            [] { Preferences::instance().setTheme("light"); });
+        add("Settings", tr("Toggle Syntax Highlighting"), QString(), [] {
+            auto& p = Preferences::instance();
+            p.setSyntaxHighlightingEnabled(!p.syntaxHighlightingEnabled());
+        });
+        add("Settings", tr("Toggle Line Numbers"), QString(), [] {
+            auto& p = Preferences::instance();
+            p.setLineNumbersEnabled(!p.lineNumbersEnabled());
+        });
+        add("Settings", tr("Toggle Change Bars"), QString(), [] {
+            auto& p = Preferences::instance();
+            p.setChangeBarsEnabled(!p.changeBarsEnabled());
+        });
+        add("Settings", tr("Toggle Word Wrap"), QString(), [] {
+            auto& p = Preferences::instance();
+            p.setWordWrap(!p.wordWrap());
+        });
+        add("Settings", tr("Toggle Show Whitespace"), QString(), [] {
+            auto& p = Preferences::instance();
+            p.setShowWhitespace(!p.showWhitespace());
+        });
+        add("Settings", tr("Toggle Auto-Save"), QString(), [] {
+            auto& p = Preferences::instance();
+            p.setAutoSaveEnabled(!p.autoSaveEnabled());
+        });
+
+        // Git
+        auto* svc = m_git->service();
+        add("Git", tr("Refresh Status"), QString(), [svc] { svc->refreshStatus(); });
+        add("Git", tr("Fetch"),          QString(), [svc] { svc->fetch(); });
+        add("Git", tr("Pull"),           QString(), [svc] { svc->pull(); });
+        add("Git", tr("Push"),           QString(), [svc] { svc->push(); });
+        add("Git", tr("Stage All"),      QString(), [svc] { svc->stageAll(); });
+        add("Git", tr("Initialize Repository"), QString(), [svc] { svc->initRepo(); });
+
+        m_palette->setCommands(std::move(cmds));
+    }
+    m_palette->showPalette();
 }
 
 void MainWindow::toggleTerminalPanel(bool on) {
@@ -201,7 +303,14 @@ void MainWindow::buildMenus() {
                     QKeySequence(QStringLiteral("Ctrl+B")),
                     [this] { m_explorer->setVisible(!m_explorer->isVisible()); });
     view->addAction(tr("Command Palette"),
-                    QKeySequence(QStringLiteral("Ctrl+Shift+P")), [] {});
+                    QKeySequence(QStringLiteral("Ctrl+Shift+P")),
+                    this, &MainWindow::openCommandPalette);
+    view->addAction(tr("Toggle Source Control"),
+                    QKeySequence(QStringLiteral("Ctrl+Shift+G")),
+                    [this] { m_titleBar->gitButton()->toggle(); });
+    view->addAction(tr("Toggle Terminal"),
+                    QKeySequence(QStringLiteral("Ctrl+`")),
+                    [this] { m_titleBar->terminalButton()->toggle(); });
     view->addAction(tr("Welcome Page"), [this] {
         m_tabs->setCurrentIndex(-1);
         m_stack->setCurrentWidget(m_welcome);
@@ -267,11 +376,27 @@ void MainWindow::applyPreferences() {
         p.theme() == QLatin1String("light") ? zen::ui::Theme::Light
                                             : zen::ui::Theme::Dark);
 
-    // Editor font size
+    // Editor font (family + size) and tab width
     QFont f = m_editor->font();
+    if (!p.editorFontFamily().isEmpty()) f.setFamily(p.editorFontFamily());
     f.setPointSize(p.editorFontSize());
     m_editor->setFont(f);
-    m_editor->setTabStopDistance(4 * QFontMetrics(f).horizontalAdvance(QLatin1Char(' ')));
+    m_editor->setTabStopDistance(
+        p.tabWidth() * QFontMetrics(f).horizontalAdvance(QLatin1Char(' ')));
+
+    // Word wrap
+    m_editor->setLineWrapMode(p.wordWrap()
+        ? QPlainTextEdit::WidgetWidth
+        : QPlainTextEdit::NoWrap);
+
+    // Show whitespace
+    {
+        QTextOption opt = m_editor->document()->defaultTextOption();
+        auto flags = opt.flags();
+        flags.setFlag(QTextOption::ShowTabsAndSpaces, p.showWhitespace());
+        opt.setFlags(flags);
+        m_editor->document()->setDefaultTextOption(opt);
+    }
 
     // Syntax highlighting on/off
     if (p.syntaxHighlightingEnabled()) {

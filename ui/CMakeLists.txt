@@ -5,6 +5,8 @@ add_library(zen_ui STATIC
     shell/TitleBar.cpp
     shell/FindBar.h
     shell/FindBar.cpp
+    shell/CommandPalette.h
+    shell/CommandPalette.cpp
     shell/StatusBar.h
     shell/StatusBar.cpp
     shell/TabCloseButton.h

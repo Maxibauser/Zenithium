@@ -16,6 +16,11 @@ Preferences::Preferences() {
     m_lineNumbers  = s.value("editor/lineNumbers", true).toBool();
     m_modIndicator = s.value("editor/modifiedIndicator", true).toBool();
     m_fontSize     = s.value("editor/fontSize", 11).toInt();
+    m_fontFamily   = s.value("editor/fontFamily", "Cascadia Mono").toString();
+    m_tabWidth     = s.value("editor/tabWidth", 4).toInt();
+    m_wordWrap     = s.value("editor/wordWrap", false).toBool();
+    m_showWhitespace = s.value("editor/showWhitespace", false).toBool();
+    m_autoSave     = s.value("editor/autoSave", false).toBool();
     m_theme        = s.value("ui/theme", "dark").toString();
     m_accent       = QColor(s.value("ui/accent", "#6ea8ff").toString());
 }
@@ -27,6 +32,11 @@ void Preferences::save() const {
     s.setValue("editor/lineNumbers",        m_lineNumbers);
     s.setValue("editor/modifiedIndicator",  m_modIndicator);
     s.setValue("editor/fontSize",           m_fontSize);
+    s.setValue("editor/fontFamily",         m_fontFamily);
+    s.setValue("editor/tabWidth",           m_tabWidth);
+    s.setValue("editor/wordWrap",           m_wordWrap);
+    s.setValue("editor/showWhitespace",     m_showWhitespace);
+    s.setValue("editor/autoSave",           m_autoSave);
     s.setValue("ui/theme",                  m_theme);
     s.setValue("ui/accent",                 m_accent.name());
 }
@@ -42,6 +52,11 @@ void Preferences::setChangeBarsEnabled(bool on)             { ZEN_SETTER(m_chang
 void Preferences::setLineNumbersEnabled(bool on)            { ZEN_SETTER(m_lineNumbers, on) }
 void Preferences::setModifiedIndicatorEnabled(bool on)      { ZEN_SETTER(m_modIndicator,on) }
 void Preferences::setEditorFontSize(int pt)                 { ZEN_SETTER(m_fontSize,    pt) }
+void Preferences::setEditorFontFamily(const QString& family){ ZEN_SETTER(m_fontFamily,  family) }
+void Preferences::setTabWidth(int spaces)                   { ZEN_SETTER(m_tabWidth,    spaces) }
+void Preferences::setWordWrap(bool on)                      { ZEN_SETTER(m_wordWrap,    on) }
+void Preferences::setShowWhitespace(bool on)                { ZEN_SETTER(m_showWhitespace, on) }
+void Preferences::setAutoSaveEnabled(bool on)               { ZEN_SETTER(m_autoSave,    on) }
 void Preferences::setTheme(const QString& name)             { ZEN_SETTER(m_theme,       name) }
 void Preferences::setAccentColor(const QColor& c)           { ZEN_SETTER(m_accent,      c) }
 
