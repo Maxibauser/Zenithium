@@ -86,6 +86,36 @@ runtime next to the executable.
 - `packaging/` — Windows / Linux installer configs
 - `docs/` — architecture notes, ADRs
 
+## Packaging (Windows)
+
+Two artifacts, built from the same install tree:
+
+```powershell
+.\packaging\windows\build-installer.ps1
+```
+
+That script imports MSVC env, configures + builds a Release, stages a clean
+install tree via `cmake --install` (windeployqt drops Qt DLLs + plugins next
+to the exe), then runs Inno Setup to produce `dist-installer\Zenithium-Setup-<ver>.exe`.
+
+The installer offers:
+
+- **Start Menu** shortcut, optional Desktop shortcut, optional PATH entry
+- **File associations** for C/C++, Python, web (JS/TS/JSON/HTML/CSS), and text/Markdown — each group is a separate opt-in task on the wizard
+- **Shell context menu** — right-click a file or folder → *Open with Zenithium* (and the folder background — right-click empty space inside a folder to open it as a workspace)
+- Proper **uninstaller** that removes registry entries and shortcuts
+
+Prereqs: [Inno Setup 6](https://jrsoftware.org/isinfo.php) installed
+(`iscc.exe` on PATH), plus the normal Zenithium build toolchain.
+
+For a **portable** ZIP without an installer:
+
+```powershell
+cmake --preset windows-msvc-release
+cmake --build --preset windows-msvc-release
+cpack --config build\windows-msvc-release\CPackConfig.cmake -G ZIP
+```
+
 ## Status
 
 Early but usable. The editor, Source Control panel, Terminal, Command
