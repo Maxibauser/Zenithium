@@ -5,6 +5,8 @@ A modern, cross-platform code IDE built with C++20 and Qt 6.
 Zenithium aims to be a small, fast, and clean editor — thoughtful defaults, a
 minimal chrome, and everything that matters one keystroke away.
 
+**[Download the latest release for Windows →](https://github.com/Maxibauser/Zenithium/releases/latest)**
+
 ## Features
 
 - **Editor** — syntax highlighting, line numbers, in-gutter change bars,
