@@ -64,6 +64,11 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     connect(m_titleBar->terminalButton(), &QToolButton::toggled,
             this, &MainWindow::toggleTerminalPanel);
 
+    connect(m_git, &GitPanel::branchInfoChanged, this,
+            [this](const QString& branch, int ahead, int behind) {
+                m_statusBar->setBranch(branch, ahead, behind);
+            });
+
     applyPreferences();
     showWelcomeIfEmpty();
 }
@@ -88,7 +93,8 @@ void MainWindow::openWorkspace(const QString& folderPath) {
     m_explorer->setRootFolder(folderPath);
     m_git->setRepoFolder(folderPath);
     m_terminal->setWorkingDirectory(folderPath);
-    m_statusBar->setMessage(tr("Workspace: %1").arg(folderPath));
+    m_statusBar->setWorkspaceName(QFileInfo(folderPath).fileName());
+    m_statusBar->setMessage(tr("Opened %1").arg(folderPath));
 }
 
 void MainWindow::toggleGitPanel(bool on) {
@@ -570,7 +576,8 @@ void MainWindow::openFolderDialog() {
     m_explorer->setRootFolder(dir);
     m_git->setRepoFolder(dir);
     m_terminal->setWorkingDirectory(dir);
-    m_statusBar->setMessage(tr("Workspace: %1").arg(dir));
+    m_statusBar->setWorkspaceName(QFileInfo(dir).fileName());
+    m_statusBar->setMessage(tr("Opened %1").arg(dir));
 }
 
 void MainWindow::openFile(const QString& path) {

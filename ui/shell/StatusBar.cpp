@@ -18,13 +18,34 @@ StatusBar::StatusBar(QWidget* parent) : QWidget(parent) {
     layout->addWidget(m_message);
     layout->addStretch(1);
 
-    auto* branch = new QLabel(QStringLiteral("⌥  no workspace"), this);
-    branch->setObjectName("ZenStatusBranch");
-    layout->addWidget(branch);
+    m_workspace = new QLabel(this);
+    m_workspace->setObjectName("ZenStatusChip");
+    m_workspace->hide();
+    layout->addWidget(m_workspace);
+
+    m_branch = new QLabel(this);
+    m_branch->setObjectName("ZenStatusChip");
+    m_branch->hide();
+    layout->addWidget(m_branch);
 }
 
 void StatusBar::setMessage(const QString& text) {
     m_message->setText(text);
+}
+
+void StatusBar::setWorkspaceName(const QString& name) {
+    if (name.isEmpty()) { m_workspace->hide(); return; }
+    m_workspace->setText(QStringLiteral("🗀  %1").arg(name));
+    m_workspace->show();
+}
+
+void StatusBar::setBranch(const QString& branch, int ahead, int behind) {
+    if (branch.isEmpty()) { m_branch->hide(); return; }
+    QString text = QStringLiteral("⎇  %1").arg(branch);
+    if (ahead)  text += QStringLiteral("  ↑%1").arg(ahead);
+    if (behind) text += QStringLiteral("  ↓%1").arg(behind);
+    m_branch->setText(text);
+    m_branch->show();
 }
 
 } // namespace zen::ui

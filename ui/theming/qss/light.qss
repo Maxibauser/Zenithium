@@ -17,7 +17,15 @@ QMainWindow, #ZenCentral { background-color: #f7f8fb; }
     background-color: #eef0f5;
     border-top: 1px solid #dde1eb;
 }
-#ZenStatusMessage, #ZenStatusBranch { color: #66708a; font-size: 12px; }
+#ZenStatusMessage { color: #66708a; font-size: 12px; }
+#ZenStatusChip {
+    color: #1a1f2c;
+    background-color: #dde1eb;
+    border: 1px solid #cbd0dd;
+    border-radius: 8px;
+    padding: 2px 8px;
+    font-size: 11px;
+}
 
 QMenuBar {
     background-color: #eef0f5;
@@ -122,6 +130,37 @@ QToolTip {
 #ZenTitleGitBtn:checked { background-color: #6ea8ff; color: #ffffff; border-color: #6ea8ff; }
 
 #ZenGitPanel { background-color: #eef0f5; border-left: 1px solid #dde1eb; }
+#ZenBranchCard {
+    background-color: #ffffff;
+    border: 1px solid #dde1eb;
+    border-radius: 8px;
+}
+#ZenGitUpstream { color: #66708a; font-size: 11px; }
+
+#ZenActivityScroll  { background: transparent; border: none; }
+#ZenActivityHost    { background: transparent; }
+#ZenActivityCard {
+    background-color: #ffffff;
+    border: 1px solid #dde1eb;
+    border-left: 3px solid #6ea8ff;
+    border-radius: 6px;
+}
+#ZenActivityCard[state="ok"]      { border-left-color: #2ea043; }
+#ZenActivityCard[state="fail"]    { border-left-color: #e5484d; }
+#ZenActivityCard[state="running"] { border-left-color: #6ea8ff; }
+#ZenActivityCmd {
+    color: #1a1f2c;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace;
+    font-size: 12px; font-weight: 600;
+}
+#ZenActivityStatus { color: #66708a; font-size: 11px; padding-left: 8px; }
+#ZenActivityCard[state="ok"]   #ZenActivityStatus { color: #2ea043; }
+#ZenActivityCard[state="fail"] #ZenActivityStatus { color: #e5484d; }
+#ZenActivityBody {
+    color: #3a4560;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace;
+    font-size: 11px; padding-top: 4px;
+}
 #ZenGitHeader, #ZenGitSectionLbl {
     color: #66708a; font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
 }
@@ -150,15 +189,12 @@ QToolTip {
 #ZenGitToolBtn:hover { background-color: #dde1eb; }
 #ZenGitList {
     background-color: #ffffff; border: 1px solid #dde1eb;
-    border-radius: 6px; outline: 0; color: #1a1f2c;
+    border-radius: 8px; outline: 0; color: #1a1f2c;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace; font-size: 12px;
 }
+#ZenGitList::item          { padding: 5px 8px; }
 #ZenGitList::item:hover    { background-color: #eef0f5; }
 #ZenGitList::item:selected { background-color: #cbd5f0; color: #1a1f2c; }
-#ZenGitOutput {
-    background-color: #ffffff; border: 1px solid #dde1eb;
-    border-radius: 6px; color: #66708a;
-    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace; font-size: 11px;
-}
 
 #ZenGitInit {
     background-color: #6ea8ff; color: #ffffff;
