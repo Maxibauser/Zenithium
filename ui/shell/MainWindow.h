@@ -21,6 +21,7 @@ class SyntaxHighlighter;
 class WelcomePage;
 class GitPanel;
 class TerminalPanel;
+class FindBar;
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -69,6 +70,7 @@ private:
     SyntaxHighlighter* m_highlighter{nullptr};
     GitPanel*          m_git        {nullptr};
     TerminalPanel*     m_terminal   {nullptr};
+    FindBar*           m_findBar    {nullptr};
     QSplitter*         m_vsplit     {nullptr};
 
     std::vector<std::unique_ptr<zen::document::Document>> m_docs;

@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 
+#include "FindBar.h"
 #include "StatusBar.h"
 #include "TabCloseButton.h"
 #include "TitleBar.h"
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     buildMenus();
 
     m_highlighter = new SyntaxHighlighter(m_editor->document());
+    m_findBar->attachEditor(m_editor);
 
     connect(m_explorer, &ExplorerPanel::fileActivated, this, &MainWindow::openFile);
     connect(m_explorer, &ExplorerPanel::openFolderRequested,
@@ -125,6 +127,9 @@ void MainWindow::buildLayout() {
     connect(m_tabs, &QTabBar::currentChanged, this, &MainWindow::switchToTab);
     rightLayout->addWidget(m_tabs);
 
+    m_findBar = new FindBar(right);
+    rightLayout->addWidget(m_findBar);
+
     m_stack = new QStackedWidget(right);
     m_welcome = new WelcomePage(m_stack);
     m_editor  = new EditorView(m_stack);
@@ -187,6 +192,9 @@ void MainWindow::buildMenus() {
     edit->addAction(tr("Cut"),   QKeySequence::Cut,   m_editor, &QPlainTextEdit::cut);
     edit->addAction(tr("Copy"),  QKeySequence::Copy,  m_editor, &QPlainTextEdit::copy);
     edit->addAction(tr("Paste"), QKeySequence::Paste, m_editor, &QPlainTextEdit::paste);
+    edit->addSeparator();
+    edit->addAction(tr("Find…"), QKeySequence::Find, this,
+                    [this] { m_findBar->showAndFocus(); });
 
     auto* view = menuBar()->addMenu(tr("&View"));
     view->addAction(tr("Toggle Explorer"),
