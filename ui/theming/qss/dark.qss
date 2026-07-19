@@ -1,0 +1,442 @@
+/* Zenithium — Dark theme
+ * Design tokens:
+ *   bg        #0f1218    surface   #161a22    elevated  #1c2130
+ *   border    #262c3d    text      #e6e9f2    subtle    #8b93a7
+ *   accent    #6ea8ff    accent-2  #7c5cff
+ */
+
+QWidget {
+    background-color: #0f1218;
+    color: #e6e9f2;
+    font-family: "Segoe UI", "Inter", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+}
+
+QMainWindow, #ZenCentral {
+    background-color: #0f1218;
+}
+
+/* Title bar */
+#ZenTitleBar {
+    background-color: #12151d;
+    border-bottom: 1px solid #262c3d;
+}
+#ZenBrand {
+    color: #e6e9f2;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Welcome stub */
+#ZenWelcome {
+    background-color: #0f1218;
+    color: #e6e9f2;
+}
+#ZenWelcome h1 {
+    color: #ffffff;
+    font-weight: 300;
+    font-size: 36px;
+}
+
+/* Status bar */
+#ZenStatusBar {
+    background-color: #12151d;
+    border-top: 1px solid #262c3d;
+}
+#ZenStatusMessage, #ZenStatusBranch {
+    color: #8b93a7;
+    font-size: 12px;
+}
+
+/* Menu bar */
+QMenuBar {
+    background-color: #12151d;
+    border-bottom: 1px solid #262c3d;
+    padding: 2px 4px;
+}
+QMenuBar::item {
+    background: transparent;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+QMenuBar::item:selected {
+    background-color: #1c2130;
+    color: #ffffff;
+}
+QMenu {
+    background-color: #161a22;
+    border: 1px solid #262c3d;
+    padding: 4px;
+}
+QMenu::item {
+    padding: 6px 24px;
+    border-radius: 4px;
+}
+QMenu::item:selected {
+    background-color: #6ea8ff;
+    color: #0f1218;
+}
+QMenu::separator {
+    height: 1px;
+    background: #262c3d;
+    margin: 4px 8px;
+}
+
+/* Explorer */
+#ZenExplorer {
+    background-color: #12151d;
+    border-right: 1px solid #1c2130;
+}
+#ZenExplorerHeader {
+    color: #8b93a7;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    background-color: #12151d;
+}
+#ZenExplorerEmpty {
+    background-color: #12151d;
+}
+#ZenExplorerHint {
+    color: #8b93a7;
+    font-size: 12px;
+    line-height: 1.5;
+}
+#ZenExplorerOpenBtn {
+    background-color: #6ea8ff;
+    color: #0f1218;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-weight: 600;
+}
+#ZenExplorerOpenBtn:hover  { background-color: #86b7ff; }
+#ZenExplorerOpenBtn:pressed { background-color: #5a95ee; }
+
+#ZenExplorerTree {
+    background-color: #12151d;
+    color: #cbd0dd;
+    border: none;
+    outline: 0;
+    show-decoration-selected: 1;
+}
+#ZenExplorerTree::item {
+    padding: 3px 6px;
+    border: none;
+}
+#ZenExplorerTree::item:hover {
+    background-color: #1c2130;
+}
+#ZenExplorerTree::item:selected {
+    background-color: #24304d;
+    color: #ffffff;
+}
+#ZenExplorerTree::branch {
+    background: transparent;
+}
+
+/* Splitter */
+QSplitter#ZenSplitter::handle {
+    background-color: #1c2130;
+}
+
+/* Welcome page */
+#ZenWelcomePage {
+    background-color: #0f1218;
+}
+#ZenWelcomeInner {
+    background-color: transparent;
+    max-width: 720px;
+}
+#ZenWelcomeBrand {
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+#ZenWelcomeSub {
+    color: #8b93a7;
+}
+#ZenWelcomeSection {
+    color: #cbd0dd;
+    padding-top: 4px;
+}
+#ZenWelcomeAction {
+    color: #6ea8ff;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    padding: 4px 0;
+}
+#ZenWelcomeAction:hover {
+    color: #86b7ff;
+    text-decoration: underline;
+}
+#ZenWelcomeTip {
+    color: #8b93a7;
+}
+
+/* Settings dialog */
+#ZenSettingsDialog QGroupBox {
+    font-weight: 600;
+    color: #cbd0dd;
+    border: 1px solid #262c3d;
+    border-radius: 8px;
+    margin-top: 12px;
+    padding: 12px;
+}
+#ZenSettingsDialog QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 12px;
+    padding: 0 6px;
+}
+
+/* Tab close button (custom-painted; QSS only needs to keep it flat) */
+#ZenTabClose {
+    background: transparent;
+    border: none;
+}
+
+/* Tab bar */
+#ZenEditorHost {
+    background-color: #0f1218;
+}
+QTabBar#ZenTabBar {
+    background-color: #12151d;
+    border-bottom: 1px solid #1c2130;
+    min-height: 32px;
+}
+QTabBar#ZenTabBar::tab {
+    background-color: #12151d;
+    color: #8b93a7;
+    padding: 8px 16px;
+    min-width: 110px;
+    border: none;
+    border-right: 1px solid #1c2130;
+    border-top: 2px solid transparent;
+}
+QTabBar#ZenTabBar::tab:hover {
+    color: #cbd0dd;
+    background-color: #161a22;
+}
+QTabBar#ZenTabBar::tab:selected {
+    background-color: #0f1218;
+    color: #ffffff;
+    border-top: 2px solid #6ea8ff;
+}
+
+/* Editor */
+#ZenEditorView {
+    background-color: #0f1218;
+    color: #e6e9f2;
+    border: none;
+    selection-background-color: #6ea8ff;
+    selection-color: #0f1218;
+}
+#ZenGutter {
+    background-color: #12151d;
+    border-right: 1px solid #1c2130;
+}
+
+/* Scrollbars */
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: transparent;
+    border: none;
+    width: 12px;
+    height: 12px;
+}
+QScrollBar::handle {
+    background: #2a3145;
+    border-radius: 6px;
+    min-height: 24px;
+    min-width: 24px;
+}
+QScrollBar::handle:hover  { background: #364062; }
+QScrollBar::handle:pressed { background: #6ea8ff; }
+QScrollBar::add-line, QScrollBar::sub-line { height: 0; width: 0; }
+QScrollBar::add-page, QScrollBar::sub-page { background: transparent; }
+
+/* Buttons */
+QPushButton {
+    background-color: #1c2130;
+    border: 1px solid #262c3d;
+    border-radius: 6px;
+    padding: 6px 14px;
+    color: #e6e9f2;
+}
+QPushButton:hover   { background-color: #232a3d; border-color: #364062; }
+QPushButton:pressed { background-color: #6ea8ff; color: #0f1218; }
+
+/* Line edits */
+QLineEdit, QTextEdit, QPlainTextEdit {
+    background-color: #161a22;
+    border: 1px solid #262c3d;
+    border-radius: 6px;
+    padding: 6px 8px;
+    selection-background-color: #6ea8ff;
+    selection-color: #0f1218;
+}
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus {
+    border-color: #6ea8ff;
+}
+
+/* Tooltip */
+QToolTip {
+    background-color: #1c2130;
+    color: #e6e9f2;
+    border: 1px solid #262c3d;
+    padding: 4px 8px;
+}
+
+/* Title-bar Git toggle */
+#ZenTitleGitBtn {
+    color: #cbd0dd;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-weight: 600;
+}
+#ZenTitleGitBtn:hover    { background-color: #1c2130; color: #ffffff; }
+#ZenTitleGitBtn:checked  { background-color: #6ea8ff; color: #0f1218; border-color: #6ea8ff; }
+
+/* Git panel */
+#ZenGitPanel {
+    background-color: #12151d;
+    border-left: 1px solid #1c2130;
+}
+#ZenGitHeader {
+    color: #8b93a7;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+}
+#ZenGitSectionLbl {
+    color: #8b93a7;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    padding-top: 4px;
+}
+#ZenGitBranch {
+    color: #e6e9f2;
+    font-weight: 600;
+}
+#ZenGitAhead {
+    color: #8b93a7;
+    font-size: 12px;
+}
+#ZenGitHint {
+    color: #8b93a7;
+    font-size: 12px;
+    padding: 6px 4px;
+}
+#ZenGitMessage {
+    background-color: #0f1218;
+    border: 1px solid #262c3d;
+    border-radius: 6px;
+    padding: 6px 8px;
+    color: #e6e9f2;
+}
+#ZenGitCommit {
+    background-color: #6ea8ff;
+    color: #0f1218;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-weight: 600;
+}
+#ZenGitCommit:hover    { background-color: #86b7ff; }
+#ZenGitCommit:pressed  { background-color: #5a95ee; }
+#ZenGitCommit:disabled { background-color: #2a3145; color: #6a7391; }
+
+#ZenGitStageAll {
+    background-color: #1c2130;
+    border: 1px solid #262c3d;
+    border-radius: 6px;
+    padding: 7px 14px;
+    color: #e6e9f2;
+}
+#ZenGitStageAll:hover { background-color: #232a3d; }
+
+#ZenGitToolBtn {
+    color: #cbd0dd;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 14px;
+}
+#ZenGitToolBtn:hover   { background-color: #1c2130; color: #ffffff; }
+#ZenGitToolBtn:pressed { background-color: #6ea8ff; color: #0f1218; }
+
+#ZenGitList {
+    background-color: #0f1218;
+    border: 1px solid #1c2130;
+    border-radius: 6px;
+    outline: 0;
+    color: #cbd0dd;
+}
+#ZenGitList::item          { padding: 3px 4px; }
+#ZenGitList::item:hover    { background-color: #1c2130; }
+#ZenGitList::item:selected { background-color: #24304d; color: #ffffff; }
+
+#ZenGitOutput {
+    background-color: #0b0e14;
+    border: 1px solid #1c2130;
+    border-radius: 6px;
+    color: #8b93a7;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace;
+    font-size: 11px;
+}
+
+#ZenGitInit {
+    background-color: #6ea8ff;
+    color: #0f1218;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-weight: 600;
+}
+#ZenGitInit:hover   { background-color: #86b7ff; }
+#ZenGitInit:pressed { background-color: #5a95ee; }
+
+/* Title-bar Terminal toggle */
+#ZenTitleTermBtn {
+    color: #cbd0dd;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-weight: 600;
+}
+#ZenTitleTermBtn:hover   { background-color: #1c2130; color: #ffffff; }
+#ZenTitleTermBtn:checked { background-color: #6ea8ff; color: #0f1218; border-color: #6ea8ff; }
+
+/* Terminal panel */
+#ZenTerminalPanel { background-color: #0b0e14; border-top: 1px solid #1c2130; }
+#ZenTerminalHeader {
+    color: #8b93a7; font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+}
+#ZenTerminalCwd { color: #6ea8ff; font-size: 11px; }
+#ZenTerminalToolBtn {
+    color: #cbd0dd; background: transparent; border: none;
+    border-radius: 4px; padding: 2px 6px; font-size: 14px;
+}
+#ZenTerminalToolBtn:hover { background-color: #1c2130; color: #ffffff; }
+#ZenTerminalOutput {
+    background-color: #0b0e14; border: 1px solid #1c2130;
+    border-radius: 6px; color: #d7dbe7;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace; font-size: 12px;
+    padding: 6px 8px;
+}
+#ZenTerminalPrompt {
+    color: #6ea8ff;
+    font-family: "Cascadia Mono", "Consolas", monospace;
+    font-weight: 700;
+    padding: 0 4px;
+}
+#ZenTerminalInput {
+    background-color: #12151d; border: 1px solid #262c3d;
+    border-radius: 6px; padding: 6px 8px; color: #e6e9f2;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace; font-size: 12px;
+}
+#ZenTerminalInput:focus { border-color: #6ea8ff; }

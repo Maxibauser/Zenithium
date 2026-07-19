@@ -1,0 +1,204 @@
+/* Zenithium — Light theme */
+QWidget {
+    background-color: #f7f8fb;
+    color: #1a1f2c;
+    font-family: "Segoe UI", "Inter", "Helvetica Neue", sans-serif;
+    font-size: 13px;
+}
+QMainWindow, #ZenCentral { background-color: #f7f8fb; }
+
+#ZenTitleBar {
+    background-color: #eef0f5;
+    border-bottom: 1px solid #dde1eb;
+}
+#ZenBrand { color: #1a1f2c; font-weight: 600; }
+
+#ZenStatusBar {
+    background-color: #eef0f5;
+    border-top: 1px solid #dde1eb;
+}
+#ZenStatusMessage, #ZenStatusBranch { color: #66708a; font-size: 12px; }
+
+QMenuBar {
+    background-color: #eef0f5;
+    border-bottom: 1px solid #dde1eb;
+    padding: 2px 4px;
+}
+QMenuBar::item { background: transparent; padding: 4px 10px; border-radius: 4px; }
+QMenuBar::item:selected { background-color: #dde1eb; }
+QMenu { background-color: #ffffff; border: 1px solid #dde1eb; padding: 4px; }
+QMenu::item { padding: 6px 24px; border-radius: 4px; }
+QMenu::item:selected { background-color: #6ea8ff; color: #ffffff; }
+
+#ZenExplorer { background-color: #eef0f5; border-right: 1px solid #dde1eb; }
+#ZenExplorerHeader {
+    color: #66708a; font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    background-color: #eef0f5;
+}
+#ZenExplorerHint { color: #66708a; font-size: 12px; }
+#ZenExplorerOpenBtn {
+    background-color: #6ea8ff; color: #ffffff;
+    border: none; border-radius: 6px; padding: 8px 14px; font-weight: 600;
+}
+#ZenExplorerOpenBtn:hover  { background-color: #86b7ff; }
+#ZenExplorerTree {
+    background-color: #eef0f5; color: #1a1f2c;
+    border: none; outline: 0;
+}
+#ZenExplorerTree::item:hover    { background-color: #dde1eb; }
+#ZenExplorerTree::item:selected { background-color: #cbd5f0; color: #1a1f2c; }
+
+QSplitter#ZenSplitter::handle { background-color: #dde1eb; }
+
+#ZenEditorHost { background-color: #ffffff; }
+QTabBar#ZenTabBar {
+    background-color: #eef0f5;
+    border-bottom: 1px solid #dde1eb;
+    min-height: 32px;
+}
+QTabBar#ZenTabBar::tab {
+    background-color: #eef0f5; color: #66708a;
+    padding: 8px 16px; min-width: 110px;
+    border: none; border-right: 1px solid #dde1eb;
+    border-top: 2px solid transparent;
+}
+QTabBar#ZenTabBar::tab:hover { color: #1a1f2c; background-color: #e2e6f0; }
+QTabBar#ZenTabBar::tab:selected {
+    background-color: #ffffff; color: #1a1f2c;
+    border-top: 2px solid #6ea8ff;
+}
+
+#ZenWelcomePage { background-color: #ffffff; }
+#ZenWelcomeBrand { color: #1a1f2c; }
+#ZenWelcomeSub, #ZenWelcomeTip { color: #66708a; }
+#ZenWelcomeSection { color: #1a1f2c; padding-top: 4px; }
+#ZenWelcomeAction {
+    color: #4a8bff; background: transparent; border: none;
+    text-align: left; padding: 4px 0;
+}
+#ZenWelcomeAction:hover { color: #6ea8ff; text-decoration: underline; }
+
+#ZenEditorView {
+    background-color: #ffffff; color: #1a1f2c;
+    border: none;
+    selection-background-color: #6ea8ff; selection-color: #ffffff;
+}
+#ZenGutter { background-color: #eef0f5; border-right: 1px solid #dde1eb; }
+
+QScrollBar:vertical, QScrollBar:horizontal {
+    background: transparent; border: none; width: 12px; height: 12px;
+}
+QScrollBar::handle { background: #cbd0dd; border-radius: 6px; min-height: 24px; min-width: 24px; }
+QScrollBar::handle:hover  { background: #a5adc4; }
+QScrollBar::add-line, QScrollBar::sub-line { height: 0; width: 0; }
+
+QPushButton {
+    background-color: #eef0f5; border: 1px solid #dde1eb;
+    border-radius: 6px; padding: 6px 14px; color: #1a1f2c;
+}
+QPushButton:hover { background-color: #dde1eb; }
+QPushButton:pressed { background-color: #6ea8ff; color: #ffffff; }
+
+QLineEdit, QTextEdit, QPlainTextEdit {
+    background-color: #ffffff; border: 1px solid #dde1eb;
+    border-radius: 6px; padding: 6px 8px;
+    selection-background-color: #6ea8ff; selection-color: #ffffff;
+}
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus { border-color: #6ea8ff; }
+
+QToolTip {
+    background-color: #ffffff; color: #1a1f2c;
+    border: 1px solid #dde1eb; padding: 4px 8px;
+}
+
+#ZenTabClose { background: transparent; border: none; }
+
+#ZenTitleGitBtn {
+    color: #1a1f2c; background: transparent;
+    border: 1px solid transparent; border-radius: 6px;
+    padding: 3px 10px; font-weight: 600;
+}
+#ZenTitleGitBtn:hover   { background-color: #dde1eb; }
+#ZenTitleGitBtn:checked { background-color: #6ea8ff; color: #ffffff; border-color: #6ea8ff; }
+
+#ZenGitPanel { background-color: #eef0f5; border-left: 1px solid #dde1eb; }
+#ZenGitHeader, #ZenGitSectionLbl {
+    color: #66708a; font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+}
+#ZenGitBranch { color: #1a1f2c; font-weight: 600; }
+#ZenGitAhead  { color: #66708a; font-size: 12px; }
+#ZenGitHint   { color: #66708a; font-size: 12px; padding: 6px 4px; }
+#ZenGitMessage {
+    background-color: #ffffff; border: 1px solid #dde1eb;
+    border-radius: 6px; padding: 6px 8px; color: #1a1f2c;
+}
+#ZenGitCommit {
+    background-color: #6ea8ff; color: #ffffff;
+    border: none; border-radius: 6px; padding: 7px 14px; font-weight: 600;
+}
+#ZenGitCommit:hover   { background-color: #86b7ff; }
+#ZenGitCommit:pressed { background-color: #5a95ee; }
+#ZenGitStageAll {
+    background-color: #ffffff; border: 1px solid #dde1eb;
+    border-radius: 6px; padding: 7px 14px; color: #1a1f2c;
+}
+#ZenGitStageAll:hover { background-color: #dde1eb; }
+#ZenGitToolBtn {
+    color: #1a1f2c; background: transparent; border: none;
+    border-radius: 4px; padding: 2px 6px; font-size: 14px;
+}
+#ZenGitToolBtn:hover { background-color: #dde1eb; }
+#ZenGitList {
+    background-color: #ffffff; border: 1px solid #dde1eb;
+    border-radius: 6px; outline: 0; color: #1a1f2c;
+}
+#ZenGitList::item:hover    { background-color: #eef0f5; }
+#ZenGitList::item:selected { background-color: #cbd5f0; color: #1a1f2c; }
+#ZenGitOutput {
+    background-color: #ffffff; border: 1px solid #dde1eb;
+    border-radius: 6px; color: #66708a;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace; font-size: 11px;
+}
+
+#ZenGitInit {
+    background-color: #6ea8ff; color: #ffffff;
+    border: none; border-radius: 6px; padding: 7px 14px; font-weight: 600;
+}
+#ZenGitInit:hover   { background-color: #86b7ff; }
+#ZenGitInit:pressed { background-color: #5a95ee; }
+
+#ZenTitleTermBtn {
+    color: #1a1f2c; background: transparent;
+    border: 1px solid transparent; border-radius: 6px;
+    padding: 3px 10px; font-weight: 600;
+}
+#ZenTitleTermBtn:hover   { background-color: #dde1eb; }
+#ZenTitleTermBtn:checked { background-color: #6ea8ff; color: #ffffff; border-color: #6ea8ff; }
+
+#ZenTerminalPanel { background-color: #eef0f5; border-top: 1px solid #dde1eb; }
+#ZenTerminalHeader {
+    color: #66708a; font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+}
+#ZenTerminalCwd { color: #4a8bff; font-size: 11px; }
+#ZenTerminalToolBtn {
+    color: #1a1f2c; background: transparent; border: none;
+    border-radius: 4px; padding: 2px 6px; font-size: 14px;
+}
+#ZenTerminalToolBtn:hover { background-color: #dde1eb; }
+#ZenTerminalOutput {
+    background-color: #ffffff; border: 1px solid #dde1eb;
+    border-radius: 6px; color: #1a1f2c;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace; font-size: 12px;
+    padding: 6px 8px;
+}
+#ZenTerminalPrompt {
+    color: #4a8bff;
+    font-family: "Cascadia Mono", "Consolas", monospace;
+    font-weight: 700; padding: 0 4px;
+}
+#ZenTerminalInput {
+    background-color: #ffffff; border: 1px solid #dde1eb;
+    border-radius: 6px; padding: 6px 8px; color: #1a1f2c;
+    font-family: "Cascadia Mono", "Consolas", "Menlo", monospace; font-size: 12px;
+}
+#ZenTerminalInput:focus { border-color: #6ea8ff; }
